@@ -44,7 +44,13 @@ def letterbox(video_path, resolution):
     p = subprocess.Popen(['ffmpeg',
                           '-i', video_path,
                           '-filter:v',
-                          'scale=(sar*iw)*min({width}/(sar*iw)\,{height}/ih):ih*min({width}/(sar*iw)\,{height}/ih), pad={width}:{height}:({width}-(sar*iw)*min({width}/(sar*iw)\,{height}/ih))/2:({height}-ih*min({width}/(sar*iw)\,{height}/ih))/2'.format(width=width, height=height),
+                          ('scale=(sar*iw)*min({width}/(sar*iw)\,{height}/ih)'
+                           ':ih*min({width}/(sar*iw)\,{height}/ih),'
+                           ' pad={width}:{height}:({width}-(sar*iw)*min'
+                           '({width}/(sar*iw)\,{height}/ih))/2:({height}-'
+                           'ih*min({width}/(sar*iw)\,'
+                           '{height}/ih))/2').format(width=width,
+                                                    height=height),
                            new_path])
     p.communicate()
     return new_path
