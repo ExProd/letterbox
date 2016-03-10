@@ -29,7 +29,7 @@ def is_16_9(video_path):
     return (True,)
 
 
-# If not 16:9, resize video and add letterbox to make 16:9
+# Resize video and add letterbox to make 16:9
 def letterbox(video_path, resolution):
     new_path = os.path.join(os.path.dirname(video_path),
                             'LETTERBOXED_' + os.path.basename(video_path))
@@ -45,8 +45,8 @@ def letterbox(video_path, resolution):
                           '-i', video_path,
                           '-filter:v',
                           ('scale=(sar*iw)*min({width}/(sar*iw)\,{height}/ih)'
-                           ':ih*min({width}/(sar*iw)\,{height}/ih),'
-                           ' pad={width}:{height}:({width}-(sar*iw)*min'
+                           ':ih*min({width}/(sar*iw)\,{height}/ih), '
+                           'pad={width}:{height}:({width}-(sar*iw)*min'
                            '({width}/(sar*iw)\,{height}/ih))/2:({height}-'
                            'ih*min({width}/(sar*iw)\,'
                            '{height}/ih))/2').format(width=width,
