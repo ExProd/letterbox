@@ -1,5 +1,20 @@
 #!/usr/bin/python
 
+'''Scale and letterbox a video file using ffprobe and ffmpeg via subprocess.
+
+Requires ffprobe/ffmpeg to be installed on host machine.
+Will scale files to 1280x720 if they are already 1280x720 or smaller.
+Will scale files to 1920x1080 if their width is larger than 1280.
+
+Examples:
+    Command-line:
+        $ python letterbox.py path/to/file
+    Module:
+        >>> import letterbox
+        >>> letterbox.main(path/to/file)
+
+'''
+
 import sys
 import os
 import subprocess
@@ -7,8 +22,14 @@ import json
 from fractions import gcd
 
 
-# Check if video is 16:9 using ffprobe
 def is_16_9(video_path):
+    '''Check if video is 16:9 using ffprobe
+
+    Args:
+        video_path (str): Path to video file.
+
+    '''
+
     p = subprocess.Popen(['ffprobe',
                           '-v', 'error',
                           '-show_entries',
@@ -29,8 +50,15 @@ def is_16_9(video_path):
     return (True,)
 
 
-# Resize video and add letterbox to make 16:9
 def scale_and_letterbox(video_path, resolution):
+    '''Scale video and add letterbox to make 16:9
+
+    Args:
+        video_path (str): Path to video file.
+        resolution (tuple): Original video resolution formatted as (width, height).
+
+    '''
+
     new_path = os.path.join(os.path.dirname(video_path),
                             'LETTERBOXED_' + os.path.basename(video_path))
 
@@ -57,6 +85,13 @@ def scale_and_letterbox(video_path, resolution):
 
 
 def main(video_path):
+    '''Main function - Check resolution and scale/letterbox if not 16:9
+
+    Args:
+        video_path (str): Path to video file.
+
+    '''
+
     resolution = is_16_9(video_path)
     if resolution[0]:
         print 'Already 16:9, doing nothing.'
