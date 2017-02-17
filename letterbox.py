@@ -20,7 +20,7 @@ def is_16_9(video_path):
     aspect_info = json.loads(result[0])
     # Create tuple of resolution i.e. (1280, 720)
     resolution = (int(aspect_info['streams'][0]['width']),
-              int(aspect_info['streams'][0]['height']))
+                  int(aspect_info['streams'][0]['height']))
 
     # Check if video is 16:9
     if not (gcd(resolution[0], 16) == 16 and gcd(resolution[1], 9) == 9):
@@ -30,7 +30,7 @@ def is_16_9(video_path):
 
 
 # Resize video and add letterbox to make 16:9
-def letterbox(video_path, resolution):
+def scale_and_letterbox(video_path, resolution):
     new_path = os.path.join(os.path.dirname(video_path),
                             'LETTERBOXED_' + os.path.basename(video_path))
 
@@ -56,20 +56,19 @@ def letterbox(video_path, resolution):
     return new_path
 
 
-def main():
+def main(video_path):
+    resolution = is_16_9(video_path)
+    if resolution[0]:
+        print 'Already 16:9, doing nothing.'
+        return
+
+    scale_and_letterbox(video_path, resolution[1])
+
+
+if __name__ == '__main__':
     try:
         video_path = sys.argv[1]
     except IndexError:
         print 'Enter filepath of video as argument please!'
         sys.exit()
-
-    resolution = is_16_9(video_path)
-    if resolution[0]:
-        print 'Already 16:9'
-        return
-
-    letterbox(video_path, resolution[1])
-
-
-if __name__ == '__main__':
-    main()
+    main(video_path)
