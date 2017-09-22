@@ -23,12 +23,7 @@ from fractions import gcd
 
 
 def is_16_9(video_path):
-    '''Check if video is 16:9 using ffprobe
-
-    Args:
-        video_path (str): Path to video file.
-
-    '''
+    '''Check if video is 16:9 using ffprobe.'''
 
     p = subprocess.Popen(['ffprobe',
                           '-v', 'error',
@@ -45,9 +40,8 @@ def is_16_9(video_path):
 
     # Check if video is 16:9
     if not (gcd(resolution[0], 16) == 16 and gcd(resolution[1], 9) == 9):
-        return (False, resolution)
-
-    return (True,)
+        return resolution
+    return True
 
 
 def scale_and_letterbox(video_path, resolution):
